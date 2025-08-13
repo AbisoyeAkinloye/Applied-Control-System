@@ -2,4 +2,6 @@
 
 ## Continous to Discrete LTI System
 
-## 
+## Reformulation of Cost Function
+
+## Cost Function Derivation
