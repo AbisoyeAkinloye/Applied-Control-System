@@ -5,3 +5,5 @@
 ## Reformulation of Cost Function
 
 ## Cost Function Derivation
+
+## Gradient of Cost Function
