@@ -23,4 +23,5 @@ They are all collection of functions.
 ```py
 gs = gridspec.GridSpec(2,2)
 ```
-> **N.B:** `(2, 2)` means 2 rows and 2 columns grid spec.
+
+> **N.B:** `(2, 2)` means 2 rows and 2 columns grid spec. It divides the plot into four rectangles.
