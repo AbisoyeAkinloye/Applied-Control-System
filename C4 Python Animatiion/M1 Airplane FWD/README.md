@@ -20,6 +20,8 @@ They are all collection of functions.
 
 - **GridSpec:** It has a function called `GridSpec` which section the plot into subplots.
 
+> Use `subplot (plt.subplots)` for simple, uniform grids of subplots and use `gridspec` for complex, irregular layouts where you need precise control over subplot placement, size, and spanning capabilities.
+
 ```py
 gs = gridspec.GridSpec(2,2)
 ```
