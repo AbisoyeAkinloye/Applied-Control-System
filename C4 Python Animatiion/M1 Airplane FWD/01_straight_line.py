@@ -10,11 +10,11 @@ dt = 0.005      # in hours (hrs)
 t = np.arange(t0,tf+dt,dt)
 
 # create x array
-x = 100 * t     # in km
+x = 800 * t     # in km
 
 # create y array
 altitude = 2
-y = np.ones(len(t)) * 2     # in km
+y = np.ones(len(t)) * altitude     # in km
 
 
 # ==================== Animation ========================= #
