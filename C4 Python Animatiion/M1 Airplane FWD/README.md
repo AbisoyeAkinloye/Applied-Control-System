@@ -27,3 +27,36 @@ gs = gridspec.GridSpec(2,2)
 ```
 
 > **N.B:** `(2, 2)` means 2 rows and 2 columns grid spec. It divides the plot into four rectangles.
+
+## Animating Moving Line
+
+### Faster Moving Line
+
+## Moving a Line with fixed length
+
+To create a line with fixed length, you need to specify the line `x and y` cordinates in the update plot function.
+
+```py
+animated_line, = ax.plot([],[],'k',linewidth=10)
+animated_line.set_data([x1, x2],[y1, y2])
+```
+
+or you create the line directly outside `update_plot` function.
+
+```py
+line, = ax.plot([x1, x2],[y1, y2],'k',linewidth=10)
+```
+
+> **N.B:** When you increase a line width, there will always be an increase in length. To restrict/avoid increase, include `solid_capstyle='butt'` to the `plot()`. As in `plot([],[],'k',linewidth=10, solid_capstyle='butt')`.
+
+### To make the plane move
+
+- Find the average of `[x1 x2]` and `[y1, y2]` call it $\hat x$ and $\hat y$ respectively
+- Find the difference between $\hat x$ and the x cordinates and $\hat y$ and the y cordinates. As in: $$x_1 - \hat x = -ve \\ \hat x - x_2 = +ve\\y_1 - \hat y = -ve \\ \hat y - y_2 = +ve$$
+- Update the `x and y` cordinates in the update plot function by adding or subtracting constant (gotten from difference) to the cordinates.
+
+    ```py
+    animated_line.set_data([x[frame]-c, x[frame]+c],[y[frame]-c, y[frame]+c])
+
+    # where c is a constant
+    ```
