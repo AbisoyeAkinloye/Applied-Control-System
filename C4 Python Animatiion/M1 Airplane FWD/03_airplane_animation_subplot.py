@@ -3,24 +3,28 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.animation import FuncAnimation
 
+# ======================== Parameters =============================
 # simulation parameters
 t0 = 0              # initial time in hours
 tf = 2              # final time in hours
 dt = 0.005          # time step
-t = np.arange(t0,tf+dt,dt)
-frames = int(len(t))
+t = np.arange(t0, tf+dt, dt)
+gain = 5            # change to make the plane move faster
+frames = int(len(t)/gain)
 
 # system parameter
-x = 800*t          # distance travel in kilometer
+x = 800*t*gain          # distance travel in kilometer
 altitude = 2
 y = np.ones(len(t))*altitude    # altitude of the airplance
 
-# figure and axis
+# ======================== Figure and Axes ==========================
 fig = plt.figure(figsize=(16,9), dpi = 120, facecolor=[0.8,0.8,0.8])
 gs = GridSpec(2,2)
+
+# >>>>>> Subplot 1
 ax = fig.add_subplot(gs[0,:],facecolor=[0.9,0.9,0.9])
 ax.set_ylim(0, max(y)+1), ax.set_yticks(np.arange(0,4))
-ax.set_xlim(min(x),max(x)), ax.set_xticks(np.arange(x[0],x[-1]+1,(x[-1])/4))
+ax.set_xlim(min(x),max(x)/gain), ax.set_xticks(np.arange(x[0],x[-1]/gain+1,(x[-1]/gain)/4))
 ax.set_xlabel('x-distance',fontsize=15), ax.set_ylabel("altitude",fontsize=15)
 ax.set_title("Airplane", fontsize=20)
 
@@ -31,7 +35,11 @@ time_travel = ax.text(1400,0.65,'',fontsize=20,color='k',bbox=bbox)
 bbox1 = dict(boxstyle='square',fc=(0.8,0.8,0.8),ec='r',lw=2)
 dist_travel = ax.text(1000,0.5,'',fontsize=20,color='k',bbox=bbox1)
 
-# ==================== Animation ======================================
+# >>>>> Subplot 2
+ax2 = fig.add_subplot(gs[1,0], facecolor=[0.9,0.9,0.9])
+
+# =========================== Animation ===============================
+# >>>>> Subplot 1
 animated_line, = ax.plot([],[],'r:o',linewidth=2)
 plane_1, = ax.plot([],[],'k',linewidth=10, solid_capstyle='butt')
 fwl, = ax.plot([],[],'k',linewidth=5,solid_capstyle='butt')     # front left wing
@@ -41,13 +49,13 @@ bwr, = ax.plot([],[],'k',linewidth=4,solid_capstyle='butt')     # back right win
 
 # dotted points
 dot = np.zeros(frames)
-idx = int(20)
+idx = int(20/gain)
 for i in range(0, frames):
     if i == idx:
         dot[i] = x[idx]
-        idx+=int(20)
+        idx+=int(20/gain)
     else:
-        dot[i] = x[idx-int(20)]
+        dot[i] = x[idx-int(20/gain)]
 
 
 # static figure elements e.g houses -> skyscrapper
@@ -57,18 +65,24 @@ house_3 = ax.plot([700,700],[0,.7],'k',linewidth=15)
 house_4 = ax.plot([900,900],[0,.9],'k',linewidth=10)
 house_5 = ax.plot([1300,1300],[0,1],'k',linewidth=20)
 
+# >>>>> Subplot 2
+
 # update the plot at each frame
 def update_plot(frame):
+    # >>>> Subplot 1
     animated_line.set_data(dot[:frame], y[:frame])
     plane_1.set_data([x[frame]-50, x[frame]+50],[y[frame]])
     fwl.set_data([x[frame]+25,x[frame]],[y[frame], y[frame]+0.4])
     fwr.set_data([x[frame]+25,x[frame]],[y[frame], y[frame]-0.4])
     bwl.set_data([x[frame]-35,x[frame]-50],[y[frame], y[frame]+0.18])
     bwr.set_data([x[frame]-35,x[frame]-50],[y[frame], y[frame]-0.18])
-    time_travel.set_text(f'{t[frame]:.1f} hrs')
+    time_travel.set_text(f'{t[frame]*gain:.1f} hrs')
     dist_travel.set_text(f'{int(x[frame])} km')
+
+    # >>>>> Subplot 2
 
     return animated_line, fwl, fwr, bwl, bwr, plane_1
 
+# ====================== Display and Export Animation ==============================
 animation = FuncAnimation(fig, update_plot, frames=frames, interval=20, repeat=True)
 plt.show()

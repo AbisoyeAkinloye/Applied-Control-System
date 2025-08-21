@@ -102,3 +102,5 @@ Assuming you wanna move the plane 10x faster.
 - Divide the axis limit and ticks by 10
 - In the logic for the dotted line, divide the index by 10.
 - For a dymanic time vector, multiply it by 10.
+
+## Adding Subplots
