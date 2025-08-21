@@ -9,7 +9,7 @@ t0 = 0              # initial time in hours
 tf = 2              # final time in hours
 dt = 0.005          # time step
 t = np.arange(t0, tf+dt, dt)
-gain = 5            # change to make the plane move faster
+gain = 1            # change to make the plane move faster
 frames = int(len(t)/gain)
 
 # system parameter
@@ -25,7 +25,7 @@ gs = GridSpec(2,2)
 ax = fig.add_subplot(gs[0,:],facecolor=[0.9,0.9,0.9])
 ax.set_ylim(0, max(y)+1), ax.set_yticks(np.arange(0,4))
 ax.set_xlim(min(x),max(x)/gain), ax.set_xticks(np.arange(x[0],x[-1]/gain+1,(x[-1]/gain)/4))
-ax.set_xlabel('x-distance',fontsize=15), ax.set_ylabel("altitude",fontsize=15)
+ax.set_xlabel('x-distance',fontsize=15), ax.set_ylabel("Altitude",fontsize=15)
 ax.set_title("Airplane", fontsize=20)
 
 # add text
@@ -37,6 +37,10 @@ dist_travel = ax.text(1000,0.5,'',fontsize=20,color='k',bbox=bbox1)
 
 # >>>>> Subplot 2
 ax2 = fig.add_subplot(gs[1,0], facecolor=[0.9,0.9,0.9])
+ax2.set_xlim(0,tf),ax2.set_ylim(min(x),max(x))
+ax2.set_xlabel("Time (hrs)",fontsize=12), ax2.set_ylabel("Distance traveled (km)",fontsize=12)
+ax2.set_xticks(np.arange(0,tf+dt,tf/4)),ax2.set_yticks(np.arange(min(x),max(x)+1,max(x)/4))
+ax2.set_title("Distance Vs Time", fontsize=15)
 
 # =========================== Animation ===============================
 # >>>>> Subplot 1
@@ -66,6 +70,10 @@ house_4 = ax.plot([900,900],[0,.9],'k',linewidth=10)
 house_5 = ax.plot([1300,1300],[0,1],'k',linewidth=20)
 
 # >>>>> Subplot 2
+x_dist, = ax2.plot([],[],'-b',linewidth=2,label="X=800*t")
+horizontal_line, = ax2.plot([],[],'r:o',linewidth=1.5, label=" ")
+vertical_line, = ax2.plot([],[],'g:o',linewidth=1.5, label=" ")
+plt.legend(loc="upper left")
 
 # update the plot at each frame
 def update_plot(frame):
@@ -80,8 +88,11 @@ def update_plot(frame):
     dist_travel.set_text(f'{int(x[frame])} km')
 
     # >>>>> Subplot 2
+    x_dist.set_data(t[:frame],x[:frame])
+    horizontal_line.set_data([t[0],t[frame]],[x[frame]])
+    vertical_line.set_data([t[frame]],[x[0],x[frame]])
 
-    return animated_line, fwl, fwr, bwl, bwr, plane_1
+    return animated_line, fwl, fwr, bwl, bwr, plane_1,x_dist
 
 # ====================== Display and Export Animation ==============================
 animation = FuncAnimation(fig, update_plot, frames=frames, interval=20, repeat=True)
