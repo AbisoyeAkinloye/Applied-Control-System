@@ -8,10 +8,11 @@ t0 = 0              # initial time in hours
 tf = 2              # final time in hours
 dt = 0.005          # time step
 t = np.arange(t0, tf+dt, dt)
-frames = int(len(t))
+gain = 5            # change to make the plane move faster
+frames = int(len(t)/gain)
 
 # system parameter
-x = 800*t          # distance travel in kilometer
+x = 800*t*gain          # distance travel in kilometer
 altitude = 2
 y = np.ones(len(t))*altitude    # altitude of the airplance
 
@@ -20,7 +21,7 @@ fig = plt.figure(figsize=(16,9), dpi = 120, facecolor=[0.8,0.8,0.8])
 gs = GridSpec(2,2)
 ax = fig.add_subplot(gs[0,:],facecolor=[0.9,0.9,0.9])
 ax.set_ylim(0, max(y)+1), ax.set_yticks(np.arange(0,4))
-ax.set_xlim(min(x),max(x)), ax.set_xticks(np.arange(x[0],x[-1]+1,(x[-1])/4))
+ax.set_xlim(min(x),max(x)/gain), ax.set_xticks(np.arange(x[0],x[-1]/gain+1,(x[-1]/gain)/4))
 ax.set_xlabel('x-distance',fontsize=15), ax.set_ylabel("altitude",fontsize=15)
 ax.set_title("Airplane", fontsize=20)
 
@@ -41,13 +42,13 @@ bwr, = ax.plot([],[],'k',linewidth=4,solid_capstyle='butt')     # back right win
 
 # dotted points
 dot = np.zeros(frames)
-idx = int(20)
+idx = int(20/gain)
 for i in range(0, frames):
     if i == idx:
         dot[i] = x[idx]
-        idx+=int(20)
+        idx+=int(20/gain)
     else:
-        dot[i] = x[idx-int(20)]
+        dot[i] = x[idx-int(20/gain)]
 
 
 # static figure elements e.g houses -> skyscrapper
@@ -65,7 +66,7 @@ def update_plot(frame):
     fwr.set_data([x[frame]+25,x[frame]],[y[frame], y[frame]-0.4])
     bwl.set_data([x[frame]-35,x[frame]-50],[y[frame], y[frame]+0.18])
     bwr.set_data([x[frame]-35,x[frame]-50],[y[frame], y[frame]-0.18])
-    time_travel.set_text(f'{t[frame]:.1f} hrs')
+    time_travel.set_text(f'{t[frame]*gain:.1f} hrs')
     dist_travel.set_text(f'{int(x[frame])} km')
 
     return animated_line, fwl, fwr, bwl, bwr, plane_1

@@ -87,4 +87,18 @@ To mark a point with a `dot` at every 80km distance, modify the `animated_line` 
 animated_line, = ax.plot([],[],'r:o',linewidth=2)
 # r -> line color red, : -> dotted line, o -> marker point
 ```
- 
+
+## Making the Plane Faster
+
+Assuming you wanna move the plane 10x faster.
+
+- Divide the frames length by 10
+
+  ```py
+  frames = int(len(t)/10)
+  ```
+
+- Multiply the distance equation `x = 800*t` by 10
+- Divide the axis limit and ticks by 10
+- In the logic for the dotted line, divide the index by 10.
+- For a dymanic time vector, multiply it by 10.
