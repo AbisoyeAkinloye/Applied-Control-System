@@ -50,6 +50,7 @@ fwl, = ax.plot([],[],'k',linewidth=5,solid_capstyle='butt')     # front left win
 fwr, = ax.plot([],[],'k',linewidth=5,solid_capstyle='butt')     # front right wing
 bwl, = ax.plot([],[],'k',linewidth=4,solid_capstyle='butt')     # back left wing
 bwr, = ax.plot([],[],'k',linewidth=4,solid_capstyle='butt')     # back right wing
+vert_line, = ax.plot([],[],'k:o',linewidth=1.5)
 
 # dotted points
 dot = np.zeros(frames)
@@ -71,8 +72,8 @@ house_5 = ax.plot([1300,1300],[0,1],'k',linewidth=20)
 
 # >>>>> Subplot 2
 x_dist, = ax2.plot([],[],'-b',linewidth=2,label="X=800*t")
-horizontal_line, = ax2.plot([],[],'r:o',linewidth=1.5, label=" ")
-vertical_line, = ax2.plot([],[],'g:o',linewidth=1.5, label=" ")
+horizontal_line, = ax2.plot([],[],'r:o',linewidth=1.5, label="distance")
+vertical_line, = ax2.plot([],[],'g:o',linewidth=1.5, label="time")
 plt.legend(loc="upper left")
 
 # update the plot at each frame
@@ -86,13 +87,14 @@ def update_plot(frame):
     bwr.set_data([x[frame]-35,x[frame]-50],[y[frame], y[frame]-0.18])
     time_travel.set_text(f'{t[frame]*gain:.1f} hrs')
     dist_travel.set_text(f'{int(x[frame])} km')
+    vert_line.set_data([x[frame]],[0,y[frame]])
 
     # >>>>> Subplot 2
     x_dist.set_data(t[:frame],x[:frame])
     horizontal_line.set_data([t[0],t[frame]],[x[frame]])
     vertical_line.set_data([t[frame]],[x[0],x[frame]])
 
-    return animated_line, fwl, fwr, bwl, bwr, plane_1,x_dist
+    return animated_line, fwl, fwr, bwl, bwr, vert_line, plane_1,x_dist
 
 # ====================== Display and Export Animation ==============================
 animation = FuncAnimation(fig, update_plot, frames=frames, interval=20, repeat=True)
