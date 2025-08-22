@@ -76,6 +76,8 @@ horizontal_line, = ax2.plot([],[],'r:o',linewidth=1.5, label="distance")
 vertical_line, = ax2.plot([],[],'g:o',linewidth=1.5, label="time")
 plt.legend(loc="upper left")
 
+plt.tight_layout()
+
 # update the plot at each frame
 def update_plot(frame):
     # >>>> Subplot 1
