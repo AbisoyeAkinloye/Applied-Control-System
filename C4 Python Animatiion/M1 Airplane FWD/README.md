@@ -104,3 +104,6 @@ Assuming you wanna move the plane 10x faster.
 - For a dymanic time vector, multiply it by 10.
 
 ## Adding Subplots
+
+
+## Quadratic and Cubic Motion of the Airplane
