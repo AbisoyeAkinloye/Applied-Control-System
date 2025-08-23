@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.animation import FuncAnimation
+plt.rcParams['text.usetex'] = True
 
 # ======================== Parameters =============================
 # simulation parameters
@@ -42,6 +43,13 @@ ax2.set_xlabel("Time (hrs)",fontsize=12), ax2.set_ylabel("Distance traveled (km)
 ax2.set_xticks(np.arange(0,tf+dt,tf/4)),ax2.set_yticks(np.arange(min(x),max(x)+1,max(x)/4))
 ax2.set_title("Distance Vs Time", fontsize=15)
 
+# >>>>>>> Subplot 3
+ax3 = fig.add_subplot(gs[1,1], facecolor=[0.9, 0.9, 0.9])
+ax3.set_xlim(0, max(t)), ax3.set_ylim(min(x),max(x))
+ax3.set_ylabel("Speed (km/h)", fontsize=12), ax3.set_xlabel("Time (hrs)")
+ax3.set_xticks(np.arange(t[0], max(t)+dt, max(t)/4)), ax3.set_yticks(np.arange(min(x),max(x)+1,max(x)/4))
+ax3.set_title("Speed Vs Time", fontsize=15)
+
 # =========================== Animation ===============================
 # >>>>> Subplot 1
 animated_line, = ax.plot([],[],'r:o',linewidth=2)
@@ -74,10 +82,25 @@ house_5 = ax.plot([1300,1300],[0,1],'k',linewidth=20)
 x_dist, = ax2.plot([],[],'-b',linewidth=2,label="X=800*t")
 horizontal_line, = ax2.plot([],[],'r:o',linewidth=1.5, label="distance")
 vertical_line, = ax2.plot([],[],'g:o',linewidth=1.5, label="time")
-plt.legend(loc="upper left")
+ax2.legend(loc="upper left")
 
+# >>>>> Subplot 3
+speed, = ax3.plot([],[],'g',linewidth=2)
+vert_ax3, = ax3.plot([],[],'k:o',linewidth=1.5)
+ax3.legend(r'\delta',loc="upper left")
+
+# plot general function
 plt.tight_layout()
 
+# Slope
+slope = []
+for i in range(0,frames):
+    if i > 0:
+        dydx = round((x[i] - x[i-1])/(t[i] - t[i-1]))
+        slope.append(dydx)
+    else:
+        slope.append(0)
+    
 # update the plot at each frame
 def update_plot(frame):
     # >>>> Subplot 1
@@ -94,9 +117,13 @@ def update_plot(frame):
     # >>>>> Subplot 2
     x_dist.set_data(t[:frame],x[:frame])
     horizontal_line.set_data([t[0],t[frame]],[x[frame]])
-    vertical_line.set_data([t[frame]],[x[0],x[frame]])
+    vertical_line.set_data([t[frame]],[0,x[frame]])
 
-    return animated_line, fwl, fwr, bwl, bwr, vert_line, plane_1,x_dist
+    # >>>>>> Subplot 3
+    speed.set_data(t[:frame],slope[frame])
+    vert_ax3.set_data([t[frame]],[0,slope[frame]])
+
+    return animated_line, fwl, fwr, bwl, bwr, vert_line, plane_1, x_dist, speed
 
 # ====================== Display and Export Animation ==============================
 animation = FuncAnimation(fig, update_plot, frames=frames, interval=20, repeat=True)
