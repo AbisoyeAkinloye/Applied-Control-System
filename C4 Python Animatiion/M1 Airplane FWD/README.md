@@ -105,5 +105,40 @@ Assuming you wanna move the plane 10x faster.
 
 ## Adding Subplots
 
-
 ## Quadratic and Cubic Motion of the Airplane
+
+General Case:
+$$\Large x = a*t^n$$
+
+> **Case 1:** $a = 800, n = 1$; **Case 2:** $a = 400, n = 2$; **Case 3:** $a = 200, n = 3$. n = 2 is the quadratic while n = 3 is the cubic function.
+
+```py
+x = 800*t        # distance travel in kilometer
+x = 400*t**2     # quadratic distance travel in kilometer
+x = 200*t**3     # cubic distance travel in kilometer
+
+# x = 1600 and t = 2
+```
+
+## Slope: Derivative of a Function
+
+$$\Large x = a*t^n \\ \Large \dfrac{dx}{dt} = n*a*t^{n-1}$$
+
+```py
+a = 400
+n = 2           # raise to power
+x = a*t**n      # quadratic distance travel in kilometer
+derivative = n*a*t**(n-1) 
+
+speed.set_data([0, t[frame]],[0,derivative[frame]])
+vert_ax3.set_data([t[frame]],[0,derivative[frame]])
+
+# or
+slope = []
+for i in range(0,frames):
+    if i > 0:
+        dydx = round((x[i] - x[i-1])/(t[i] - t[i-1]))
+        slope.append(dydx)
+    else:
+        slope.append(0)
+```

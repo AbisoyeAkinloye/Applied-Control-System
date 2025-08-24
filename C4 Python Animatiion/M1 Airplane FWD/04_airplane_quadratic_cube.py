@@ -13,7 +13,9 @@ gain = 1            # change to make the plane move faster
 frames = int(len(t)/gain)
 
 # system parameter
-x = 800*t*gain          # distance travel in kilometer
+a = 400
+n = 2           # raise to power
+x = a*t**n      # quadratic distance travel in kilometer
 altitude = 2
 y = np.ones(len(t))*altitude    # altitude of the airplance
 
@@ -48,6 +50,10 @@ ax3.set_xlim(0, max(t)), ax3.set_ylim(min(x),max(x))
 ax3.set_ylabel("Speed (km/h)", fontsize=12), ax3.set_xlabel("Time (hrs)")
 ax3.set_xticks(np.arange(t[0], max(t)+dt, max(t)/4)), ax3.set_yticks(np.arange(min(x),max(x)+1,max(x)/4))
 ax3.set_title("Speed Vs Time", fontsize=15)
+
+# add text
+speed_text = ax3.text(0.45, 1000, '', fontsize=12, color='k')
+
 
 # =========================== Animation ===============================
 # >>>>> Subplot 1
@@ -84,13 +90,14 @@ vertical_line, = ax2.plot([],[],'g:o',linewidth=1.5, label="time")
 ax2.legend(loc="upper left")
 
 # >>>>> Subplot 3
-speed, = ax3.plot([],[],'g',linewidth=2,label=r"$\frac{\Delta x}{\Delta t}$ = 800 km/h")
+speed, = ax3.plot([],[],'g',linewidth=2,label=r"$\frac{\Delta x}{\Delta t}$")
 vert_ax3, = ax3.plot([],[],'k:o',linewidth=1.5, label="speed")
 ax3.legend(loc="upper left")
 
 # plot general function
 plt.tight_layout()
 
+# ========================= Slope of a function =============================
 # Slope
 slope = []
 for i in range(0,frames):
@@ -99,7 +106,10 @@ for i in range(0,frames):
         slope.append(dydx)
     else:
         slope.append(0)
-    
+
+derivative = n*a*t**(n-1) 
+
+# ====================== Animation callback Function ============================
 # update the plot at each frame
 def update_plot(frame):
     # >>>> Subplot 1
@@ -119,8 +129,13 @@ def update_plot(frame):
     vertical_line.set_data([t[frame]],[0,x[frame]])
 
     # >>>>>> Subplot 3
-    speed.set_data(t[:frame],slope[frame])
-    vert_ax3.set_data([t[frame]],[0,slope[frame]])
+    # speed.set_data([0, t[frame]],[0,slope[frame]])
+    # vert_ax3.set_data([t[frame]],[0,slope[frame]])
+    # speed_text.set_text(f'dy/dx = {int(slope[frame])} km/hr')
+
+    speed.set_data([0, t[frame]],[0,derivative[frame]])
+    vert_ax3.set_data([t[frame]],[0,derivative[frame]])
+    speed_text.set_text(f'Speed = {int(derivative[frame])} km/hr')
 
     return animated_line, fwl, fwr, bwl, bwr, vert_line, plane_1, x_dist, speed
 
