@@ -84,13 +84,13 @@ house_4 = ax.plot([900,900],[0,.9],'k',linewidth=10)
 house_5 = ax.plot([1300,1300],[0,1],'k',linewidth=20)
 
 # >>>>> Subplot 2
-x_dist, = ax2.plot([],[],'-b',linewidth=2,label="X=800*t")
+x_dist, = ax2.plot([],[],'-b',linewidth=2,label=f"X={a}*t**{n}")
 horizontal_line, = ax2.plot([],[],'r:o',linewidth=1.5, label="distance")
 vertical_line, = ax2.plot([],[],'g:o',linewidth=1.5, label="time")
 ax2.legend(loc="upper left")
 
 # >>>>> Subplot 3
-speed, = ax3.plot([],[],'g',linewidth=2,label=r"$\frac{\Delta x}{\Delta t}$")
+speed, = ax3.plot([],[],'g',linewidth=2,label=r"$\frac{\Delta x}{\Delta t}$"+f"= {n*a}t^{n-1}")
 vert_ax3, = ax3.plot([],[],'k:o',linewidth=1.5, label="speed")
 ax3.legend(loc="upper left")
 
@@ -129,11 +129,11 @@ def update_plot(frame):
     vertical_line.set_data([t[frame]],[0,x[frame]])
 
     # >>>>>> Subplot 3
-    # speed.set_data([0, t[frame]],[0,slope[frame]])
+    # speed.set_data(t[:frame],slope[:frame])
     # vert_ax3.set_data([t[frame]],[0,slope[frame]])
     # speed_text.set_text(f'dy/dx = {int(slope[frame])} km/hr')
 
-    speed.set_data([0, t[frame]],[0,derivative[frame]])
+    speed.set_data(t[:frame],derivative[:frame])
     vert_ax3.set_data([t[frame]],[0,derivative[frame]])
     speed_text.set_text(f'Speed = {int(derivative[frame])} km/hr')
 
